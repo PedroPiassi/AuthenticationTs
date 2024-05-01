@@ -9,5 +9,7 @@ const authController = new AuthController();
 export const router = Router();
 
 router.post('/create', userController.store);
-router.get('/users', AuthMiddleware, userController.index);
 router.post('/login', authController.login);
+router.post('/auth', AuthMiddleware, authController.auth);
+
+router.get('/users', AuthMiddleware, userController.index);

@@ -11,8 +11,14 @@ import {
 import { formikProps } from "@/utils/formikProps";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import useAuthService from "@/services/auth";
+import { authStore } from "@/stores/auth-store";
+import { observer } from "mobx-react-lite";
+import Cookies from "js-cookie";
 
-const Login = () => {
+export const Login = observer(() => {
+  const { authentication } = useAuthService();
+
   const formikValidation = Yup.object().shape({
     email: Yup.string()
       .email("E-mail inválido")
@@ -27,20 +33,16 @@ const Login = () => {
     },
     validationSchema: formikValidation,
     onSubmit: () => {
-      console.log(formik.values);
-      // supportService
-      //   .createSupportForm(formData)
-      //   .then((resp) => {
-      //     snackbar(resp.success, "success");
-      //     setTimeout(() => {
-      //       formik.resetForm(formik.initialValues);
-      //       setTechnicalForm(false);
-      //     }, 200);
-      //   })
-      //   .catch((error) => {
-      //     const erro = error.response.data.errors;
-      //     snackbar(erro[Object.keys(erro)[0]], "error");
-      //   });
+      authentication(formik.values)
+        .then((resp) => {
+          authStore.setToken(resp.data.token);
+          authStore.setUser(resp.data.user);
+          Cookies.set("token", resp.data.token);
+          console.log("sucess", resp);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
     },
   });
 
@@ -93,6 +95,4 @@ const Login = () => {
       </Container>
     </>
   );
-};
-
-export default Login;
+});

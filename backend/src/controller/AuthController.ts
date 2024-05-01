@@ -13,10 +13,14 @@ export class AuthController {
         const isValuePassword = await compare(password, user.password);
         if (!isValuePassword) return res.json({ error: "Password invalid!" });
 
-        const token = sign({ id: user.id }, "secret", { expiresIn: "1d" });
+        const token = sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
         const { id, name } = user;
 
         return res.json({ user: { id, name, email }, token });
+    }
+
+    auth (req: Request, res: Response) {
+        return res.json({ status: true });
     }
 }
