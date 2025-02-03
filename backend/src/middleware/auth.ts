@@ -20,10 +20,6 @@ export function AuthMiddleware(
   const [, token] = authorization.split(" ");
 
   try {
-    // const isValid = validateToken(token, process.env.JWT_SECRET);
-    // console.log(isValid);
-    // if (!isValid) throw new Error("Token invalid!");
-
     const decoded = verify(token, process.env.JWT_SECRET) as TokenPayload;
     const { id } = decoded;
 
