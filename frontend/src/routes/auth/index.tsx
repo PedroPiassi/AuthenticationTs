@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export const PrivateRoutes = observer(() => {
   const authService = useAuthService();
   const token = Cookies.get("token") || "";
+
   const [loged, setLoged] = useState(false);
 
   const handleAuth = async () => {
